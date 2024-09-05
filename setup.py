@@ -1,3 +1,5 @@
+from setuptools import setup, find_packages
+
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
@@ -5,10 +7,10 @@ setup(
     name="JancoAPI",
     version="0.1.0",
     description="A Python library with random and niche functions",
-    long_description=long_description,  # Include the README content
-    long_description_content_type="text/markdown",  # Specify that it's Markdown
+    long_description=long_description,
+    long_description_content_type="text/markdown",  # Explicitly set to Markdown
     author="Janco Nel",
-    author_email="y@example.com",
+    author_email="your_email@example.com",
     url="https://github.com/JancoNel/JancoAPI",
     packages=find_packages(),
     classifiers=[
