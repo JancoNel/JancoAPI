@@ -18,18 +18,6 @@ You can install the package via pip:
 pip install JancoAPI
 ```
 
-## Usage
-
-Here's an example of how to use some of the functions:
-
-```python
-import JancoAPI
-
-# Example of calling a function
-result = JancoAPI.some_function()
-print(result)
-```
-
 ## Contributing
 
 If you'd like to contribute, feel free to fork the repository and submit a pull request. We welcome improvements and new ideas.
