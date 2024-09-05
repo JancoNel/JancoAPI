@@ -1,11 +1,15 @@
-from setuptools import setup, find_packages
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
 
 setup(
-    name="JancoAPI",  # Your package name
-    version="0.1.0",  # Version of your package
+    name="JancoAPI",
+    version="0.1.0",
     description="A Python library with random and niche functions",
+    long_description=long_description,  # Include the README content
+    long_description_content_type="text/markdown",  # Specify that it's Markdown
     author="Janco Nel",
-    url="https://github.com/JancoNel/JancoAPI",  # GitHub repo URL
+    author_email="y@example.com",
+    url="https://github.com/JancoNel/JancoAPI",
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
